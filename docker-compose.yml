@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  #  caddy:
+  #    image: caddy:latest
+  #    container_name: caddy
+  #    restart: unless-stopped
+  #    ports:
+  #      - '80:80'
+  #      - '443:443'
+  #    volumes: 
+  #      - ./Caddyfile:/etc/caddy/Caddyfile
+  #      - ./caddy_config:/config
+  #      - ./caddy_data:/data
+  #    links:
+  #      - sanity
+
+  sanity:
+    image: eqlabs/crypto-sanity-preserver:latest
+    container_name: sanity
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    hostname: sanity
+    restart: unless-stopped
+    links:
+      - mongo
+    ports:
+      - '80:80'
+    volumes:
+      - pdf:/home/python/app/pdf
+      - txt:/home/python/app/txt
+      - data:/home/python/app/data
+      - thumb:/home/python/app/thumb 
+      - static:/home/python/app/static
+      - ./secret_key.txt:/home/python/app/secret_key.txt
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-sanity
+    hostname: mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo:/data/db
+    
+  watchtower:
+    command: --label-enable --cleanup --interval 300
+    image: containrrr/watchtower
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    network_mode: none
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+    pdf:
+      external: true
+    txt:
+      external: true
+    data:
+      external: true
+    thumb:
+      external: true
+    static:
+      external: true
+    mongo:
+      external: true

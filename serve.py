@@ -12,7 +12,8 @@ from hashlib import md5
 from flask import Flask, request, session, url_for, redirect, \
      render_template, abort, g, flash, _app_ctx_stack
 from flask_limiter import Limiter
-from werkzeug import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+
 import pymongo
 
 from utils import safe_pickle_dump, strip_version, isvalidid, Config
@@ -194,7 +195,7 @@ def encode_json(ps, n=10, send_images=True, send_abstracts=True):
     struct['originally_published_time'] = '%s/%s/%s' % (timestruct.month, timestruct.day, timestruct.year)
 
     # fetch amount of discussion on this paper
-    struct['num_discussion'] = comments.count({ 'pid': p['_rawid'] })
+    struct['num_discussion'] = comments.count_documents({ 'pid': p['_rawid'] })
 
     # arxiv comments from the authors (when they submit the paper)
     cc = p.get('arxiv_comment', '')
@@ -677,7 +678,7 @@ if __name__ == "__main__":
   SEARCH_DICT = cache['search_dict']
 
   print('connecting to mongodb...')
-  client = pymongo.MongoClient()
+  client = pymongo.MongoClient('mongo', port=27017)
   mdb = client.arxiv
   tweets_top1 = mdb.tweets_top1
   tweets_top7 = mdb.tweets_top7

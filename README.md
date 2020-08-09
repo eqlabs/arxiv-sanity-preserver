@@ -1,29 +1,29 @@
 
 # arxiv sanity preserver
 
-This project is a web interface that attempts to tame the overwhelming flood of papers on Arxiv. It allows researchers to keep track of recent papers, search for papers, sort papers by similarity to any paper, see recent popular papers, to add papers to a personal library, and to get personalized recommendations of (new or old) Arxiv papers. This code is currently running live at [www.arxiv-sanity.com/](http://www.arxiv-sanity.com/), where it's serving 25,000+ Arxiv papers from Machine Learning (cs.[CV|AI|CL|LG|NE]/stat.ML) over the last ~3 years. With this code base you could replicate the website to any of your favorite subsets of Arxiv by simply changing the categories in `fetch_papers.py`.
+## Modifications
+This is a dockerized version of Karpathy's original, fit to fetch cryptography, blockchain, distributed systems, and networking papers from Arxiv.
 
-![user interface](https://raw.github.com/karpathy/arxiv-sanity-preserver/master/ui.jpeg)
-
-### Code layout
-
-There are two large parts of the code:
-
-**Indexing code**. Uses Arxiv API to download the most recent papers in any categories you like, and then downloads all papers, extracts all text, creates tfidf vectors based on the content of each paper. This code is therefore concerned with the backend scraping and computation: building up a database of arxiv papers, calculating content vectors, creating thumbnails, computing SVMs for people, etc.
-
-**User interface**. Then there is a web server (based on Flask/Tornado/sqlite) that allows searching through the database and filtering papers by similarity, etc.
-
-### Dependencies
-
-Several: You will need numpy, feedparser (to process xml files), scikit learn (for tfidf vectorizer, training of SVM), flask (for serving the results), flask_limiter, and tornado (if you want to run the flask server in production). Also dateutil, and scipy. And sqlite3 for database (accounts, library support, etc.). Most of these are easy to get through `pip`, e.g.:
-
+### Build the image(s)
 ```bash
-$ virtualenv env                # optional: use virtualenv
-$ source env/bin/activate       # optional: use virtualenv
-$ pip install -r requirements.txt
+docker build -t eqlabs/crypto-sanity-preserver -f ./docker/server/Dockerfile .
+docker build -t eqlabs/crypto-sanity-fetcher -f ./docker/fetcher/Dockerfile .
 ```
 
-You will also need [ImageMagick](http://www.imagemagick.org/script/index.php) and [pdftotext](https://poppler.freedesktop.org/), which you can install on Ubuntu as `sudo apt-get install imagemagick poppler-utils`. Bleh, that's a lot of dependencies isn't it.
+### Running the platform
+```bash
+./create_volumes.sh
+docker-compose up -d
+```
+
+### Fetching new papers
+To get new papers on a day-to-day basis on the platform, one needs to create a scheduled run of the fetcher. To run the fetcher, we have the following command:
+```bash
+docker run --rm -v txt:/home/python/app/txt -v pdf:/home/python/app/pdf -v data:/home/python/app/data -v thumb:/home/python/app/thumb -v static:/home/python/app/static -e MAX_INDEX=500 -e RESULTS_PER_PAGE=250 eqlabs/crypto-sanity-preserver /bin/bash ./fetch.sh
+docker restart sanity
+```
+
+## Old info
 
 ### Processing pipeline
 
@@ -54,24 +54,3 @@ If you'd like to run the flask server online (e.g. AWS) run it as `python serve.
 
 You also want to create a `secret_key.txt` file and fill it with random text (see top of `serve.py`).
 
-### Current workflow
-
-Running the site live is not currently set up for a fully automatic plug and play operation. Instead it's a bit of a manual process and I thought I should document how I'm keeping this code alive right now. I have a script that performs the following update early morning after arxiv papers come out (~midnight PST):
-
-```bash
-python fetch_papers.py
-python download_pdfs.py
-python parse_pdf_to_text.py
-python thumb_pdf.py
-python analyze.py
-python buildsvm.py
-python make_cache.py
-```
-
-I run the server in a screen session, so `screen -S serve` to create it (or `-r` to reattach to it) and run:
-
-```bash
-python serve.py --prod --port 80
-```
-
-The server will load the new files and begin hosting the site. Note that on some systems you can't use port 80 without `sudo`. Your two options are to use `iptables` to reroute ports or you can use [setcap](http://stackoverflow.com/questions/413807/is-there-a-way-for-non-root-processes-to-bind-to-privileged-ports-1024-on-l) to elavate the permissions of your `python` interpreter that runs `serve.py`. In this case I'd recommend careful permissions and maybe virtualenv, etc.

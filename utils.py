@@ -9,23 +9,23 @@ import tempfile
 # -----------------------------------------------------------------------------
 class Config(object):
     # main paper information repo file
-    db_path = 'db.p'
+    db_path = 'data/db.p'
     # intermediate processing folders
     pdf_dir = os.path.join('data', 'pdf')
     txt_dir = os.path.join('data', 'txt')
-    thumbs_dir = os.path.join('static', 'thumbs')
+    thumbs_dir = os.path.join('static', 'thumb')
     # intermediate pickles
-    tfidf_path = 'tfidf.p'
-    meta_path = 'tfidf_meta.p'
-    sim_path = 'sim_dict.p'
-    user_sim_path = 'user_sim.p'
+    tfidf_path = 'data/tfidf.p'
+    meta_path = 'data/tfidf_meta.p'
+    sim_path = 'data/sim_dict.p'
+    user_sim_path = 'data/user_sim.p'
     # sql database file
-    db_serve_path = 'db2.p' # an enriched db.p with various preprocessing info
-    database_path = 'as.db'
-    serve_cache_path = 'serve_cache.p'
+    db_serve_path = 'data/db2.p' # an enriched db.p with various preprocessing info
+    database_path = 'data/as.db'
+    serve_cache_path = 'data/serve_cache.p'
     
     beg_for_hosting_money = 1 # do we beg the active users randomly for money? 0 = no.
-    banned_path = 'banned.txt' # for twitter users who are banned
+    banned_path = 'data/banned.txt' # for twitter users who are banned
     tmp_dir = 'tmp'
 
 # Context managers for atomic writes courtesy of
