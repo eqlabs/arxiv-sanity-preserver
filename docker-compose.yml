@@ -27,10 +27,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - pdf:/home/python/app/pdf
-      - txt:/home/python/app/txt
       - data:/home/python/app/data
-      - thumb:/home/python/app/thumb 
       - static:/home/python/app/static
       - ./secret_key.txt:/home/python/app/secret_key.txt
 
@@ -39,8 +36,6 @@ services:
     container_name: mongo-sanity
     hostname: mongo
     restart: unless-stopped
-    ports:
-      - '27017:27017'
     volumes:
       - mongo:/data/db
     

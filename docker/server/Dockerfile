@@ -14,8 +14,8 @@ RUN chmod +x fetch.sh
 
 RUN ./init.sh 
 
-ENV MAX_INDEX=20
-ENV RESULTS_PER_ITER=10
+ENV MAX_INDEX=256
+ENV RESULTS_PER_ITER=128
 
 RUN ./fetch.sh
 
