@@ -27,8 +27,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    ports:
-      - '1337:1337'
+    #ports:
+      #- '1337:1337'
     links:
       - mongo
     volumes:
