@@ -13,7 +13,7 @@ class Config(object):
     # intermediate processing folders
     pdf_dir = os.path.join('data', 'pdf')
     txt_dir = os.path.join('data', 'txt')
-    thumbs_dir = os.path.join('data', 'thumb')
+    thumbs_dir = os.path.join('static', 'thumbs')
     # intermediate pickles
     tfidf_path = 'data/tfidf.p'
     meta_path = 'data/tfidf_meta.p'

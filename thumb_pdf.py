@@ -58,29 +58,8 @@ for i,p in enumerate(pdf_files):
         # some papers are shorter than 8 pages, then results from previous paper will
         # "leek" over to this result, through the intermediate files.
 
-  # spawn async. convert can unfortunately enter an infinite loop, have to handle this.
-  # this command will generate 8 independent images thumb-0.png ... thumb-7.png of the thumbnails
-  pp = Popen(['convert', '-strip', '%s[0-7]' % (pdf_path, ), '-thumbnail', 'x156', os.path.join(Config.tmp_dir, 'thumb.png')])
-  t0 = time.time()
-  while time.time() - t0 < 20: # give it 15 seconds deadline
-    ret = pp.poll()
-    if not (ret is None):
-      # process terminated
-      break
-    time.sleep(0.1)
-  ret = pp.poll()
-  if ret is None:
-    print("convert command did not terminate in 20 seconds, terminating.")
-    pp.terminate() # give up
-
-  if not os.path.isfile(os.path.join(Config.tmp_dir, 'thumb-0.png')):
-    # failed to render pdf, replace with missing image
-    missing_thumb_path = os.path.join('static', 'missing.jpg')
-    os.system('cp %s %s' % (missing_thumb_path, thumb_path))
-    print("could not render pdf, creating a missing image placeholder")
-  else:
-    cmd = "montage -mode concatenate -quality 80 -tile x1 %s %s" % (os.path.join(Config.tmp_dir, 'thumb-*.png'), thumb_path)
-    print(cmd)
-    os.system(cmd)
+  cmd = "montage -density 300 %s[0-7] -thumbnail x156 -mode Concatenate -quality 80 -tile x1 %s" % (pdf_path, thumb_path)
+  print(cmd)
+  os.system(cmd)
 
   time.sleep(0.01) # silly way for allowing for ctrl+c termination

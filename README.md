@@ -6,8 +6,7 @@ This is a dockerized version of Karpathy's original, fit to fetch cryptography, 
 
 ### Build the image(s)
 ```bash
-docker build -t eqlabs/crypto-sanity-preserver -f ./docker/server/Dockerfile .
-docker build -t eqlabs/crypto-sanity-fetcher -f ./docker/fetcher/Dockerfile .
+docker-compose build sanity
 ```
 
 ### Running the platform
@@ -19,8 +18,7 @@ docker-compose up -d
 ### Fetching new papers
 To get new papers on a day-to-day basis on the platform, one needs to create a scheduled run of the fetcher. To run the fetcher, we have the following command:
 ```bash
-docker run --rm -v txt:/home/python/app/txt -v pdf:/home/python/app/pdf -v data:/home/python/app/data -v thumb:/home/python/app/thumb -v static:/home/python/app/static -e MAX_INDEX=500 -e RESULTS_PER_PAGE=250 eqlabs/crypto-sanity-preserver /bin/bash ./fetch.sh
-docker restart sanity
+./run_fetcher.sh
 ```
 
 ## Old info
