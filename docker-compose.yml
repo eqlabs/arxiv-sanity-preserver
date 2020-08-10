@@ -33,7 +33,6 @@ services:
       - mongo
     volumes:
       - data:/home/python/app/data
-      - static:/home/python/app/static
 
   mongo:
     image: mongo:latest
@@ -55,8 +54,6 @@ services:
 
 volumes:
     data:
-      external: true
-    static:
       external: true
     mongo:
       external: true
