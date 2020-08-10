@@ -1,7 +1,9 @@
 FROM python:3.8-slim
 
 RUN apt-get update
-RUN apt-get install -y imagemagick poppler-utils build-essential libffi-dev python-dev sqlite3
+RUN apt-get install -y imagemagick poppler-utils build-essential libffi-dev python-dev sqlite3 gcc sed
+
+RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
 COPY . /home/python/app
 
@@ -14,12 +16,14 @@ RUN chmod +x fetch.sh
 
 RUN ./init.sh 
 
-ENV MAX_INDEX=256
-ENV RESULTS_PER_ITER=128
+ENV MAX_INDEX=10
+ENV RESULTS_PER_ITER=10
 
 RUN ./fetch.sh
 
-EXPOSE 80
+RUN touch secret_key.txt
 
-CMD ["python", "serve.py", "--prod", "--port", "80"]
+EXPOSE 1337
+
+CMD ["python", "serve.py", "--prod", "--port", "1337"]
 

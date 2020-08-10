@@ -1,3 +1,3 @@
-https://crypto-sanity.com https://www.crypto-sanity.com {
+https://sanity.equilibrium.co {
   reverse_proxy sanity:80
 }

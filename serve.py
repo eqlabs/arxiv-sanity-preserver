@@ -22,10 +22,7 @@ from utils import safe_pickle_dump, strip_version, isvalidid, Config
 # -----------------------------------------------------------------------------
 
 # database configuration
-if os.path.isfile('secret_key.txt'):
-  SECRET_KEY = open('secret_key.txt', 'r').read()
-else:
-  SECRET_KEY = 'devkey, should be in a file'
+SECRET_KEY = os.getenv('SECRET_KEY') or 'devkey, should be in a file'
 app = Flask(__name__)
 app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
