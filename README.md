@@ -19,4 +19,5 @@ To get new papers on a day-to-day basis on the platform, one needs to create a s
 ```bash
 ./run_fetcher.sh
 ```
+Run it manually or with a crontab.
 
