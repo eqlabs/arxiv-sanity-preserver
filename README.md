@@ -1,4 +1,9 @@
-# Crypto sanity preserver
+# Crypto Sanity Preserver
+https://sanity.equilibrium.co
+
+Also available at:
+
+https://crypto-sanity.com
 
 ## Modifications
 This is a dockerized version of Karpathy's original, fit to fetch cryptography, blockchain, distributed systems, and networking papers from Arxiv.
