@@ -44,8 +44,8 @@ def parse_arxiv_url(url):
   return parts[0], int(parts[1])
 
 if __name__ == "__main__":
-  MAX_INDEX = os.getenv('MAX_INDEX')
-  RESULTS_PER_ITER = os.getenv('RESULTS_PER_ITER')
+  MAX_INDEX = os.getenv('MAX_INDEX') or 10
+  RESULTS_PER_ITER = os.getenv('RESULTS_PER_ITER') or 10
   OFFSET = os.getenv('OFFSET') or 0
 
   # parse input arguments

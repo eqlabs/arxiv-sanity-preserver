@@ -16,9 +16,6 @@ RUN chmod +x fetch.sh
 
 RUN ./init.sh 
 
-ENV MAX_INDEX=10
-ENV RESULTS_PER_ITER=10
-
 RUN ./fetch.sh
 
 RUN touch secret_key.txt

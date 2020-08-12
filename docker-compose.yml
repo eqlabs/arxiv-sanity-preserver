@@ -31,7 +31,7 @@ services:
       - mongo
     volumes:
       - data:/home/python/app/data
-      - thumbs:/home/python/static/thumbs
+      - thumbs:/home/python/app/static/thumbs
 
   mongo:
     image: mongo:latest
