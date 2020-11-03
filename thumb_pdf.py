@@ -29,7 +29,7 @@ for i,p in enumerate(pdf_files):
   pdf_path = os.path.join(pdf_dir, p)
   thumb_path = os.path.join(Config.thumbs_dir, p + '.jpg')
 
-  if os.path.isfile(thumb_path): 
+  if os.path.isfile(thumb_path):
     print("skipping %s, thumbnail already exists." % (pdf_path, ))
     continue
 
@@ -39,7 +39,7 @@ for i,p in enumerate(pdf_files):
   # tile them horizontally, use JPEG compression 80, trim the borders for each image
   #cmd = "montage %s[0-7] -mode Concatenate -tile x1 -quality 80 -resize x230 -trim %s" % (pdf_path, "thumbs/" + f + ".jpg")
   #print "EXEC: " + cmd
-  
+
   # nvm, below using a roundabout alternative that is worse and requires temporary files, yuck!
   # but i found that it succeeds more often. I can't remember wha thappened anymore but I remember
   # that the version above, while more elegant, had some problem with it on some pdfs. I think.
@@ -49,6 +49,7 @@ for i,p in enumerate(pdf_files):
     for i in range(8):
       f = os.path.join(Config.tmp_dir, 'thumb-%d.png' % (i,))
       f2= os.path.join(Config.tmp_dir, 'thumbbuf-%d.png' % (i,))
+
       if os.path.isfile(f):
         cmd = 'mv %s %s' % (f, f2)
         os.system(cmd)
@@ -61,5 +62,9 @@ for i,p in enumerate(pdf_files):
   cmd = "montage -density 300 %s[0-7] -thumbnail x156 -mode Concatenate -quality 80 -tile x1 %s" % (pdf_path, thumb_path)
   print(cmd)
   os.system(cmd)
+
+  # remove the PDF
+  rm_pdf_cmd = "rm %s" % pdf_path
+  os.system(rm_pdf_cmd)
 
   time.sleep(0.01) # silly way for allowing for ctrl+c termination
